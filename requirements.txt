@@ -1,0 +1,11 @@
+# Exact versions so every install is the same. Updated on purpose only.
+Django==5.2.8
+django-otp==1.6.1
+segno==1.6.6
+cryptography==44.0.3
+openpyxl==3.1.5
+uvicorn==0.34.3
+whitenoise==6.9.0
+tzdata==2025.2
+asgiref==3.13.0
+sqlparse==0.6.1

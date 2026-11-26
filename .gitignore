@@ -1,0 +1,13 @@
+# Never commit data, settings or keys
+data/
+*.env
+.env*
+*.gadaabak
+*.sqlite3
+move_to_postgres.json
+reference/
+# Python
+.venv/
+__pycache__/
+*.pyc
+staticfiles/
