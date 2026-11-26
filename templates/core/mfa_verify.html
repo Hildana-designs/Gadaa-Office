@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block mainclass %}narrow{% endblock %}
+{% block content %}
+<div class="card"><h1>Enter your phone code</h1>
+<p class="muted">Open the authenticator app on your phone and type the 6-digit code shown for GADAA Office.</p>
+<form method="post">{% csrf_token %}<input type="hidden" name="next" value="{{ next }}">
+<div class="field">{{ form.code.errors }}{{ form.code }}</div>
+<button class="btn">Continue</button></form>
+<form method="post" action="{% url 'core:logout' %}" style="margin-top:12px">{% csrf_token %}<button class="btn secondary">Cancel</button></form>
+<p class="muted" style="margin-top:14px">Lost your phone? Ask the Admin to reset your code.</p>
+</div>
+{% endblock %}

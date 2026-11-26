@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block content %}
+<div class="toolbar"><h1 style="flex:1">Backups</h1><form method="post" action="{% url 'core:backup_now' %}">{% csrf_token %}<button class="btn">Back up now</button></form></div>
+<div class="card"><p>Backups run every day by themselves. Each is encrypted and checked after saving.</p>
+<p>On this computer: <code>{{ backup_dir }}</code><br>External drive: {% if offsite %}<code>{{ offsite }}</code>{% else %}<span class="pill warn">not set</span> (see README, "Backups"){% endif %}</p>
+<p class="muted">To restore, follow the README section "Restore from a backup".</p></div>
+<div class="tablewrap"><table><tr><th>Started</th><th>Result</th><th>Why</th><th>File</th><th class="num">Size</th><th>External copy</th><th>Message</th></tr>
+{% for r in runs %}<tr><td>{{ r.started_at|date:"d M Y H:i" }}</td><td><span class="pill {% if r.status == 'ok' %}ok{% else %}bad{% endif %}">{{ r.get_status_display }}</span></td><td>{{ r.trigger }}</td>
+<td class="muted">{{ r.file_name }}</td><td class="num">{{ r.size_bytes|filesizeformat }}</td><td>{{ r.offsite_copied|yesno:"Yes,No" }}</td><td class="muted">{{ r.message }}</td></tr>
+{% empty %}<tr><td colspan="7" class="muted">No backups yet.</td></tr>{% endfor %}</table></div>{% endblock %}

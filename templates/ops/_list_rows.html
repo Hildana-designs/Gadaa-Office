@@ -1,0 +1,4 @@
+<div class="tablewrap"><table><tr>{% for name, label in columns %}<th>{{ label }}</th>{% endfor %}</tr>
+{% for obj, values in rows %}<tr>{% for v in values %}<td>{% if forloop.first %}<a href="{% if r.slug == 'trips' %}{{ obj.get_absolute_url }}{% else %}{% url 'ops:'|add:r.slug|add:'_edit' obj.pk %}{% endif %}">{{ v|default:"(open)" }}</a>{% else %}{{ v }}{% endif %}</td>{% endfor %}</tr>
+{% empty %}<tr><td colspan="{{ columns|length }}" class="muted">Nothing here yet.</td></tr>{% endfor %}</table></div>
+<div class="pager">{% if page.has_previous %}<a href="?page={{ page.previous_page_number }}&q={{ q }}">Previous</a>{% endif %}<span class="muted">{{ page.paginator.count }} records</span>{% if page.has_next %}<a href="?page={{ page.next_page_number }}&q={{ q }}">Next</a>{% endif %}</div>

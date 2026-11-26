@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% load humanize %}
+{% block content %}
+<h1>Today, {{ today|date:"l j F Y" }}</h1>
+<div class="grid">
+<div class="card"><h2>Due and overdue tasks</h2>
+{% for t in tasks_due %}<div>{% if t.due_date < today %}<span class="pill bad">overdue</span>{% else %}<span class="pill warn">today</span>{% endif %} {{ t.title }} {% if t.trip %}<span class="muted">{{ t.trip.code }}</span>{% endif %}</div>
+{% empty %}<p class="muted">Nothing due. Task rules arrive in Phase 1.</p>{% endfor %}</div>
+<div class="card"><h2>Hotel release deadlines (next 7 days)</h2>
+{% for h in hotel_deadlines %}<div>{{ h.release_deadline|date:"d M" }} · {{ h.hotel_name }} <span class="muted">{{ h.trip.code }}</span></div>
+{% empty %}<p class="muted">None.</p>{% endfor %}</div>
+<div class="card"><h2>Last backup</h2>
+{% if last_backup %}<p><span class="pill {% if last_backup.status == 'ok' %}ok{% else %}bad{% endif %}">{{ last_backup.get_status_display }}</span> {{ last_backup.started_at|date:"d M Y H:i" }}</p><p class="muted">{{ last_backup.message }}</p>
+{% else %}<p class="muted">No backup yet.</p>{% endif %}</div>
+</div>
+<div class="card"><h2>Trips not yet closed</h2>
+<div class="tablewrap"><table><tr><th>Code</th><th>Name</th><th>Dates</th><th>Pax</th><th>Status</th></tr>
+{% for t in open_trips %}<tr><td><a href="{{ t.get_absolute_url }}">{{ t.code }}</a></td><td>{{ t.name }}</td><td>{{ t.start_date|date:"d M" }} – {{ t.end_date|date:"d M Y" }}</td><td>{{ t.pax }}</td><td>{{ t.status }}</td></tr>
+{% empty %}<tr><td colspan="5" class="muted">No open trips.</td></tr>{% endfor %}</table></div></div>
+{% endblock %}

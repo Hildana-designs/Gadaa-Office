@@ -1,0 +1,54 @@
+:root{--ink:#1d2430;--muted:#5d6878;--line:#dde2e8;--bg:#f6f7f9;--card:#fff;--brand:#7a3e12;--brand2:#a8571b;--ok:#1e7a44;--warn:#9a5b00;--warnbg:#fff4dc;--bad:#a12626;--badbg:#fde8e8;--accent:#e8eef7}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.45 "Segoe UI","Noto Sans","Noto Sans Ethiopic","Nyala",system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--brand)}
+.top{display:flex;align-items:center;gap:20px;background:var(--brand);color:#fff;padding:0 20px;min-height:52px;flex-wrap:wrap}
+.top a{color:#fff;text-decoration:none}
+.brand{font-weight:700;font-size:17px;letter-spacing:.3px}
+nav.main{display:flex;gap:14px;flex:1;flex-wrap:wrap;align-items:center}
+.navgroup{position:relative;padding:14px 0;cursor:default}
+.navgroup>span{opacity:.95}
+.navgroup>span:after{content:" ▾";font-size:11px}
+.navmenu{display:none;position:absolute;top:46px;left:-8px;background:#fff;border:1px solid var(--line);border-radius:6px;box-shadow:0 6px 18px rgba(0,0,0,.12);min-width:190px;z-index:5;padding:6px 0}
+.navmenu a{display:block;color:var(--ink);padding:7px 14px}
+.navmenu a:hover{background:var(--accent)}
+.navgroup:hover .navmenu,.navgroup:focus-within .navmenu{display:block}
+.who{font-size:13px}.who small{opacity:.8}
+.inline{display:inline}
+button.link{background:none;border:0;color:#fff;text-decoration:underline;cursor:pointer;font:inherit}
+.page{max-width:1280px;margin:0 auto;padding:20px}
+.narrow{max-width:440px;margin:60px auto;padding:20px}
+h1{font-size:22px;margin:4px 0 16px}h2{font-size:17px;margin:22px 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px 18px;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+table{width:100%;border-collapse:collapse;background:#fff}
+th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);background:#fafbfc}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr:hover td{background:#fbfcfe}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+.toolbar{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.toolbar input[type=search]{flex:1;min-width:200px}
+input,select,textarea{font:inherit;padding:7px 9px;border:1px solid #c5ccd5;border-radius:6px;width:100%;background:#fff}
+input[type=checkbox]{width:auto}
+label{font-weight:600;font-size:13px;display:block;margin-bottom:3px}
+.field{margin-bottom:12px}.field .help{color:var(--muted);font-size:12px}
+.errorlist{color:var(--bad);margin:2px 0;padding-left:16px;font-size:13px}
+.formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:0 18px}
+.btn{display:inline-block;background:var(--brand);color:#fff;border:0;border-radius:6px;padding:8px 14px;cursor:pointer;text-decoration:none;font:inherit}
+.btn:hover{background:var(--brand2)}
+.btn.secondary{background:#fff;color:var(--ink);border:1px solid #c5ccd5}
+.btn.danger{background:var(--bad)}
+.msg{padding:9px 12px;border-radius:6px;margin-bottom:12px;background:var(--accent)}
+.msg.success{background:#e5f5eb}.msg.error{background:var(--badbg)}
+.banner{padding:8px 20px;font-size:14px}.banner.warn{background:var(--warnbg);color:var(--warn)}
+.pill{display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;background:#eef1f5}
+.pill.ok{background:#e5f5eb;color:var(--ok)}.pill.bad{background:var(--badbg);color:var(--bad)}.pill.warn{background:var(--warnbg);color:var(--warn)}
+.muted{color:var(--muted)}
+.moneybar{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.moneybar div{background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.moneybar b{display:block;font-size:18px;font-variant-numeric:tabular-nums}
+.moneybar span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.qr svg{width:220px;height:220px}
+.pager{margin-top:10px;display:flex;gap:10px;align-items:center}
+@media (max-width:700px){.page{padding:12px}.top{padding:6px 12px}.navmenu{position:static;box-shadow:none}}

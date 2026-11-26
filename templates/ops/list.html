@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% block content %}
+<div class="toolbar"><h1 style="flex:1">{{ r.title }}</h1>{% if can_edit %}<a class="btn" href="{% url 'ops:'|add:r.slug|add:'_new' %}{% if request.GET.trip %}?trip={{ request.GET.trip }}{% endif %}">Add</a>{% endif %}</div>
+<div class="toolbar"><input type="search" name="q" value="{{ q }}" placeholder="Search…" hx-get="" hx-trigger="input changed delay:300ms, search" hx-target="#rows" hx-push-url="true"></div>
+<div id="rows">{% include "ops/_list_rows.html" %}</div>
+{% endblock %}

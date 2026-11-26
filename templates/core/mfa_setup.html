@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% block mainclass %}narrow{% endblock %}
+{% block content %}
+<div class="card"><h1>Set up your phone code</h1>
+<ol>
+<li>Install <b>Google Authenticator</b> or <b>Microsoft Authenticator</b> on your phone (free).</li>
+<li>In the app, choose "Add account" then "Scan a QR code", and scan this picture.</li>
+<li>Type the 6-digit code the app shows.</li>
+</ol>
+<div class="qr">{{ qr_svg|safe }}</div>
+<form method="post">{% csrf_token %}
+<div class="field">{{ form.code.errors }}{{ form.code }}</div>
+<button class="btn">Confirm</button></form>
+</div>
+{% endblock %}

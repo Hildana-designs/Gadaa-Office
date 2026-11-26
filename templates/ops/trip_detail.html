@@ -1,0 +1,32 @@
+{% extends "base.html" %}{% load humanize %}{% block content %}
+<div class="toolbar"><h1 style="flex:1">{{ trip.code }} · {{ trip.name }}</h1>{% if can_edit %}<a class="btn secondary" href="{% url 'ops:trips_edit' trip.pk %}">Edit trip</a>{% endif %}</div>
+<p class="muted">{{ trip.client_name }}{% if trip.partner %} · {{ trip.partner }}{% endif %} · {{ trip.pax }} guests · {{ trip.start_date|date:"d M" }} – {{ trip.end_date|date:"d M Y" }} ({{ trip.days }} days) · {{ trip.route }} · <span class="pill">{{ trip.status }}</span></p>
+<div class="moneybar">
+<div><span>Price</span><b>{{ trip.price_etb|floatformat:2|intcomma|default:"—" }}</b><small class="muted">{% if trip.currency != "ETB" %}{{ trip.price_amount|floatformat:2|intcomma }} {{ trip.currency }} at {{ trip.fx_rate|floatformat:-4 }}{% if not trip.fx_confirmed %} <span class="pill warn">rate unconfirmed</span>{% endif %}{% else %}ETB{% endif %}</small></div>
+<div><span>Received</span><b>{{ received|floatformat:2|intcomma }}</b></div>
+<div><span>Costs</span><b>{{ cost_total|floatformat:2|intcomma }}</b>{% if recoverable %}<small class="muted">net {{ net_cost|floatformat:2|intcomma }} after {{ recoverable|floatformat:2|intcomma }} recoverable</small>{% endif %}</div>
+<div><span>Profit</span><b>{{ profit|floatformat:2|intcomma|default:"—" }}</b></div>
+<div><span>Margin</span><b>{{ margin|floatformat:1|default:"—" }}{% if margin is not None %}%{% endif %}</b></div>
+</div>
+<h2>Cost by category</h2>
+<div class="tablewrap"><table><tr><th>Category</th><th class="num">ETB</th><th class="num">% of cost</th></tr>
+{% for c, v, p in categories %}<tr><td>{{ c }}</td><td class="num">{{ v|floatformat:2|intcomma }}</td><td class="num">{{ p|floatformat:1 }}%</td></tr>{% endfor %}
+<tr><th>Total</th><th class="num">{{ cost_total|floatformat:2|intcomma }}</th><th></th></tr></table></div>
+<h2>Hotels <a class="muted" href="{% url 'ops:hotel-bookings_new' %}?trip={{ trip.pk }}&next={{ request.path }}">add</a></h2>
+<div class="tablewrap"><table><tr><th>Hotel</th><th>Town</th><th>Check-in</th><th>Nights</th><th>Status</th><th class="num">Total ETB</th><th>Release by</th><th>Conf. no.</th></tr>
+{% for h in hotels %}<tr><td><a href="{% url 'ops:hotel-bookings_edit' h.pk %}">{{ h.hotel_name }}</a></td><td>{{ h.town }}</td><td>{{ h.check_in|date:"d M" }}</td><td>{{ h.nights }}</td><td>{{ h.status }}</td><td class="num">{{ h.total_etb|floatformat:2|intcomma }}{% if h.price_status != "confirmed" %} <span class="pill warn">{{ h.price_status }}</span>{% endif %}</td><td>{{ h.release_deadline|date:"d M"|default:"—" }}</td><td>{{ h.confirmation_no }}</td></tr>
+{% empty %}<tr><td colspan="8" class="muted">None.</td></tr>{% endfor %}</table></div>
+<h2>Crew and payment schedule <a class="muted" href="{% url 'ops:crew_new' %}?trip={{ trip.pk }}&next={{ request.path }}">add</a></h2>
+<div class="tablewrap"><table><tr><th>Role</th><th>Name</th><th class="num">Days</th><th class="num">Rate</th><th class="num">Total</th><th class="num">40% advance</th><th class="num">60% balance</th><th>Balance due</th><th>Paid</th></tr>
+{% for c in crew %}<tr><td><a href="{% url 'ops:crew_edit' c.pk %}">{{ c.role }}</a></td><td>{{ c.name|default:"—" }}</td><td class="num">{{ c.days }}</td><td class="num">{{ c.daily_rate|floatformat:2|intcomma|default:"no rate" }}</td><td class="num">{{ c.total_fee|floatformat:2|intcomma }}</td><td class="num">{{ c.advance_amount|floatformat:2|intcomma }}</td><td class="num">{{ c.balance_amount|floatformat:2|intcomma }}</td><td>{{ c.balance_due_on|date:"D d M" }}</td><td>{{ c.balance_paid_on|date:"d M"|default:"—" }}</td></tr>
+{% empty %}<tr><td colspan="9" class="muted">None.</td></tr>{% endfor %}</table></div>
+<h2>All cost lines <a class="muted" href="{% url 'ops:cost-lines_list' %}?trip={{ trip.pk }}">open list</a></h2>
+<div class="tablewrap"><table><tr><th>Ref</th><th>Category</th><th>Item</th><th>Who pays</th><th class="num">ETB</th><th>Status</th></tr>
+{% for l in lines %}<tr{% if l.excluded %} class="muted"{% endif %}><td>{{ l.ref }}</td><td>{{ l.category }}</td><td><a href="{% url 'ops:cost-lines_edit' l.pk %}">{{ l.description }}</a></td><td>{{ l.who_pays }}</td><td class="num">{{ l.amount_etb|floatformat:2|intcomma }}</td><td>{% if l.excluded %}<span class="pill">excluded</span>{% elif l.recoverable %}<span class="pill">recoverable</span>{% elif l.status != "confirmed" %}<span class="pill warn">{{ l.status }}</span>{% endif %}</td></tr>{% endfor %}</table></div>
+<div class="grid" style="margin-top:16px">
+<div class="card"><h2>Passengers</h2>{% if can_see_passports %}<a href="{% url 'ops:passengers_list' %}?trip={{ trip.pk }}">{{ passenger_count }} on file</a>{% else %}<span class="muted">Hidden for your role.</span>{% endif %}</div>
+<div class="card"><h2>Payments</h2>{% for p in payments %}<div>{{ p.date|date:"d M" }} {{ p.get_direction_display }} {{ p.amount|floatformat:2|intcomma }} {{ p.currency }}</div>{% empty %}<span class="muted">None recorded.</span>{% endfor %} <a href="{% url 'ops:payments_new' %}?trip={{ trip.pk }}&next={{ request.path }}">add</a></div>
+<div class="card"><h2>Open items</h2>{% for t in tasks %}<div>{{ t.title }} <span class="muted">{{ t.get_status_display }}</span></div>{% empty %}<span class="muted">None.</span>{% endfor %}</div>
+</div>
+<p class="muted" style="margin-top:12px">{{ trip.notes|linebreaksbr }}</p>
+{% endblock %}

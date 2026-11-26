@@ -1,0 +1,2 @@
+{% extends "base.html" %}{% block content %}<div class="card"><h1>Delete {{ obj }}?</h1><p>This cannot be undone, except by restoring a backup. The activity log keeps a copy of what was deleted.</p>
+<form method="post">{% csrf_token %}<button class="btn danger">Yes, delete</button> <a class="btn secondary" href="{% url 'ops:'|add:r.slug|add:'_edit' obj.pk %}">No, keep it</a></form></div>{% endblock %}

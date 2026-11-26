@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% block content %}
+<h1>Settings</h1>
+<p class="muted">Values marked <span class="pill warn">unconfirmed</span> are assumptions from the workbook. Tax values need your accountant.</p>
+<div class="tablewrap"><table><tr><th>Setting</th><th>Value</th><th>Status</th><th>Where it came from</th></tr>
+{% for s in items %}<tr><td>{% if is_admin %}<a href="{% url 'core:setting_edit' s.pk %}">{{ s.label }}</a>{% else %}{{ s.label }}{% endif %}</td><td>{{ s.value|default:"—" }}</td>
+<td>{% if s.confirmed %}<span class="pill ok">confirmed</span>{% else %}<span class="pill warn">unconfirmed</span>{% endif %}</td><td class="muted">{{ s.source_note }}</td></tr>
+{% empty %}<tr><td colspan="4" class="muted">No settings yet. They arrive with the workbook import.</td></tr>{% endfor %}</table></div>
+<h2>Drop-down lists</h2>
+<div class="grid">{% regroup lists by list_name as groups %}{% for g in groups %}<div class="card"><b>{{ g.grouper }}</b><div class="muted">{% for c in g.list %}{{ c.value }}{% if not forloop.last %} · {% endif %}{% endfor %}</div></div>{% empty %}<p class="muted">None yet.</p>{% endfor %}</div>
+{% endblock %}

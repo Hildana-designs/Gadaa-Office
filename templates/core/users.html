@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block content %}
+<div class="toolbar"><h1 style="flex:1">Users</h1><a class="btn" href="{% url 'core:user_new' %}">Add user</a></div>
+<div class="tablewrap"><table><tr><th>Username</th><th>Name</th><th>Role</th><th>Active</th><th>Last login</th><th></th></tr>
+{% for u in users %}<tr><td><a href="{% url 'core:user_edit' u.pk %}">{{ u.username }}</a></td><td>{{ u.first_name }}</td>
+<td>{% for g in u.groups.all %}{{ g.name }}{% endfor %}</td><td>{{ u.is_active|yesno:"Yes,No" }}</td><td>{{ u.last_login|date:"d M Y H:i"|default:"never" }}</td>
+<td><form method="post" action="{% url 'core:user_reset_mfa' u.pk %}">{% csrf_token %}<button class="btn secondary">Reset phone code</button></form></td></tr>{% endfor %}
+</table></div>{% endblock %}
